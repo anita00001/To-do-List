@@ -31,11 +31,6 @@ class ToDo {
     this.updateStorage(updateTask);
   }
 
-  // removeTask(id) {
-  //   // const updateTask = this.taskList.filter((it) => it.id !== id);
-  //   this.updateStorage(updateTask);
-  // }
-
   getFromStorage() {
     return this.taskList;
   }
@@ -49,17 +44,8 @@ class ToDo {
 const tasks = new ToDo();
 let taskListArray = tasks.getFromStorage();
 
-// let counter = 0;
-// function next() {
-//   counter += 1;
-//   return counter;
-// }
-
 const showTask = () => {
   showToDo.innerHTML = '';
-  // let currentNumber = 1;
-  // currentNumber = next(currentNumber);
-  // currentNumber -= 1;
   taskListArray.forEach((element) => showToDo.insertAdjacentHTML('beforeend',
     `<ul>
     <li><input type="checkbox" class="checkbox" ${element.completed ? 'checked' : ''}></li>
