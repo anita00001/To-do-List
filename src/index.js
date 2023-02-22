@@ -1,15 +1,92 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import _ from 'lodash';
 import './style.css';
 
-function component() {
-  const element = document.createElement('div');
+const pressEnter = document.getElementById('press-enter');
+const hoverText = document.getElementById('button-hover');
 
-  // Lodash, currently included via a script, is required for this line to work
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-  element.classList.add('hello');
+const showToDo = document.getElementById('task-list');
+const myTask = document.getElementById('my-task');
+const form = document.getElementById('form');
+const error = document.getElementById('error');
 
-  return element;
+// Hover message when hover over enter icon
+pressEnter.addEventListener('mouseover', () => {
+  hoverText.style.display = 'block';
+});
+
+pressEnter.addEventListener('mouseout', () => {
+  hoverText.style.display = 'none';
+});
+
+// Local Storage
+class ToDo {
+  constructor() {
+    this.taskList = JSON.parse(localStorage.getItem('storage-task')) || [];
+  }
+
+  addTask(description) {
+    const updateTask = [
+      ...this.taskList,
+      { description },
+    ];
+    this.updateStorage(updateTask);
+  }
+
+  // removeTask(id) {
+  //   // const updateTask = this.taskList.filter((it) => it.id !== id);
+  //   this.updateStorage(updateTask);
+  // }
+
+  getFromStorage() {
+    return this.taskList;
+  }
+
+  updateStorage(data) {
+    localStorage.setItem('storage-task', JSON.stringify(data));
+    this.taskList = data;
+  }
 }
 
-document.body.appendChild(component());
+const tasks = new ToDo();
+let taskListArray = tasks.getFromStorage();
+
+// let counter = 0;
+// function next() {
+//   counter += 1;
+//   return counter;
+// }
+
+const showTask = () => {
+  showToDo.innerHTML = '';
+  // let currentNumber = 1;
+  // currentNumber = next(currentNumber);
+  // currentNumber -= 1;
+  taskListArray.forEach((element) => showToDo.insertAdjacentHTML('beforeend',
+    `<ul>
+    <li><input type="checkbox" class="checkbox" ${element.completed ? 'checked' : ''}></li>
+    <li>${element.description}</li>
+    <li id="verticle-dot" class="verticle-dot"><i class="fas fa-ellipsis-v"></i></li>
+  </ul>`));
+};
+
+showTask();
+
+myTask.addEventListener('click', (e) => {
+  e.preventDefault();
+  error.innerHTML = '';
+});
+
+pressEnter.addEventListener('click', (e) => {
+  e.preventDefault();
+  const duplicate = taskListArray.find((task) => task.description === myTask.value);
+  if (myTask.value.length === 0) {
+    error.innerText = 'Fields cannot be empty!';
+  } else if (duplicate) {
+    error.innerText = 'Task already added to the To-Do!!';
+  } else {
+    error.innerHTML = '';
+    tasks.addTask(myTask.value);
+    taskListArray = tasks.getFromStorage();
+    showTask();
+  }
+  form.reset();
+});
