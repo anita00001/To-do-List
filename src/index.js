@@ -1,12 +1,17 @@
-import './style.css';
+// import './style.css';
+
+import {
+  addToDo,
+  getFromStorage,
+  saveToStorage,
+} from './todo.js';
+
+import updateToDo from './UpdateStorage.js';
+import deleteToDo from './DeleteFunction.js';
+import deleteAllCompleted from './DeleteAll.js';
 
 const pressEnter = document.getElementById('press-enter');
 const hoverText = document.getElementById('button-hover');
-
-const showToDo = document.getElementById('task-list');
-const myTask = document.getElementById('my-task');
-const form = document.getElementById('form');
-const error = document.getElementById('error');
 
 // Hover message when hover over enter icon
 pressEnter.addEventListener('mouseover', () => {
@@ -17,62 +22,107 @@ pressEnter.addEventListener('mouseout', () => {
   hoverText.style.display = 'none';
 });
 
-// Local Storage
-class ToDo {
-  constructor() {
-    this.taskList = JSON.parse(localStorage.getItem('storage-task')) || [];
-  }
+const showToDo = () => {
+  const tasks = getFromStorage();
+  const tasksList = document.getElementById('tasks-list');
+  tasksList.innerHTML = '';
+  tasks.forEach((todo, index) => {
+    const li = document.createElement('li');
+    li.className = 'new-task';
 
-  addTask(description) {
-    const updateTask = [
-      ...this.taskList,
-      { description },
-    ];
-    this.updateStorage(updateTask);
-  }
+    const todoItemLeft = document.createElement('div');
+    todoItemLeft.className = 'checkbox-and-task-description';
 
-  getFromStorage() {
-    return this.taskList;
-  }
+    const input = document.createElement('input');
+    input.className = 'checkbox';
+    input.type = 'checkbox';
+    if (todo.completed) {
+      input.setAttribute('checked', '');
+    }
 
-  updateStorage(data) {
-    localStorage.setItem('storage-task', JSON.stringify(data));
-    this.taskList = data;
-  }
-}
+    input.onchange = (e) => {
+      if (e.target.checked) {
+        tasks[index].completed = true;
+        e.target.parentNode.children[1].classList.add('strike-through');
+      } else {
+        tasks[index].completed = false;
+        e.target.parentNode.children[1].classList.remove('strike-through');
+      }
+      saveToStorage(tasks);
+    };
 
-const tasks = new ToDo();
-let taskListArray = tasks.getFromStorage();
+    todoItemLeft.appendChild(input);
 
-const showTask = () => {
-  showToDo.innerHTML = '';
-  taskListArray.forEach((element) => showToDo.insertAdjacentHTML('beforeend',
-    `<ul>
-    <li><input type="checkbox" class="checkbox" ${element.completed ? 'checked' : ''}></li>
-    <li>${element.description}</li>
-    <li id="verticle-dot" class="verticle-dot"><i class="fas fa-ellipsis-v"></i></li>
-  </ul>`));
+    const taskDescription = document.createElement('p');
+    taskDescription.classList.add('show');
+    if (todo.completed) {
+      taskDescription.classList.add('strike-through');
+    } else {
+      taskDescription.classList.remove('strike-through');
+    }
+    taskDescription.innerText = todo.description;
+    todoItemLeft.appendChild(taskDescription);
+
+    const editInput = document.createElement('input');
+    editInput.className = 'hide';
+    editInput.type = 'text';
+    editInput.value = todo.description;
+    editInput.addEventListener('focusout', (e) => {
+      li.classList.toggle('edit-bg');
+      updateToDo(tasks, index, e.target.value);
+      showToDo();
+    });
+    todoItemLeft.appendChild(editInput);
+
+    li.appendChild(todoItemLeft);
+
+    const deleteIcon = document.createElement('span');
+    deleteIcon.className = 'hide';
+    deleteIcon.innerHTML = 'delete';
+    deleteIcon.addEventListener('click', () => {
+      deleteToDo(tasks, index);
+      showToDo();
+    });
+    li.appendChild(deleteIcon);
+
+    const moreVert = document.createElement('span');
+    moreVert.className = 'material-symbols-outlined';
+    moreVert.innerHTML = 'more_vert';
+    moreVert.addEventListener('click', () => {
+      moreVert.className = 'hide';
+      deleteIcon.className = 'material-symbols-outlined';
+
+      taskDescription.className = 'hide';
+      editInput.className = 'show';
+      li.classList.toggle('edit-bg');
+      editInput.focus();
+    });
+    li.appendChild(moreVert);
+    tasksList.appendChild(li);
+
+    const clearList = document.getElementById('clear-button');
+    clearList.addEventListener('click', () => {
+      deleteAllCompleted(tasks);
+      showToDo();
+    });
+  });
 };
 
-showTask();
+window.addEventListener('load', () => {
+  const addNewTodo = document.getElementById('press-enter');
+  addNewTodo.addEventListener('click', () => {
+    // if condition
+    addToDo();
+    showToDo();
+  });
 
-myTask.addEventListener('click', (e) => {
-  e.preventDefault();
-  error.innerHTML = '';
-});
+  const todoInput = document.getElementById('my-task');
+  todoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      addToDo();
+      showToDo();
+    }
+  });
 
-pressEnter.addEventListener('click', (e) => {
-  e.preventDefault();
-  const duplicate = taskListArray.find((task) => task.description === myTask.value);
-  if (myTask.value.length === 0) {
-    error.innerText = 'Fields cannot be empty!';
-  } else if (duplicate) {
-    error.innerText = 'Task already added to the To-Do!!';
-  } else {
-    error.innerHTML = '';
-    tasks.addTask(myTask.value);
-    taskListArray = tasks.getFromStorage();
-    showTask();
-  }
-  form.reset();
+  showToDo();
 });
