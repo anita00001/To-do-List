@@ -1,78 +1,86 @@
 import './style.css';
+import ToDo from './localstorage.js';
 
-const pressEnter = document.getElementById('press-enter');
-const hoverText = document.getElementById('button-hover');
-
-const showToDo = document.getElementById('task-list');
-const myTask = document.getElementById('my-task');
-const form = document.getElementById('form');
-const error = document.getElementById('error');
-
-// Hover message when hover over enter icon
-pressEnter.addEventListener('mouseover', () => {
-  hoverText.style.display = 'block';
-});
-
-pressEnter.addEventListener('mouseout', () => {
-  hoverText.style.display = 'none';
-});
-
-// Local Storage
-class ToDo {
-  constructor() {
-    this.taskList = JSON.parse(localStorage.getItem('storage-task')) || [];
-  }
-
-  addTask(description) {
-    const updateTask = [
-      ...this.taskList,
-      { description },
-    ];
-    this.updateStorage(updateTask);
-  }
-
-  getFromStorage() {
-    return this.taskList;
-  }
-
-  updateStorage(data) {
-    localStorage.setItem('storage-task', JSON.stringify(data));
-    this.taskList = data;
-  }
-}
+const ul = document.getElementById('tasks-list');
+const description = document.getElementById('my-task');
+const targetPressEnter = document.getElementById('press-enter');
 
 const tasks = new ToDo();
-let taskListArray = tasks.getFromStorage();
 
-const showTask = () => {
-  showToDo.innerHTML = '';
-  taskListArray.forEach((element) => showToDo.insertAdjacentHTML('beforeend',
-    `<ul>
-    <li><input type="checkbox" class="checkbox" ${element.completed ? 'checked' : ''}></li>
-    <li>${element.description}</li>
-    <li id="verticle-dot" class="verticle-dot"><i class="fas fa-ellipsis-v"></i></li>
-  </ul>`));
+const showToDo = () => {
+  ul.innerHTML = '';
+
+  for (let i = 0; i < tasks.taskList.length; i += 1) {
+    const li = document.createElement('li');
+    li.className = 'task-row';
+    const isChecked = tasks.taskList[i].completed ? 'checked' : '';
+
+    li.innerHTML = `
+      <input id="checkbox" type="checkbox" ${isChecked} onchange="toggleCompleted(${i})">
+      <p id="task-description" contenteditable="true">${tasks.taskList[i].description}</p>
+      <div class="options">
+        <button class="dots"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        <span class="trash" onclick="removeTask(${i})"><i class="fa-solid fa-trash-can"></i></span>
+      </div>
+      `;
+    ul.appendChild(li);
+
+    // Edit task description
+    const editTask = li.querySelector('#task-description');
+
+    editTask.addEventListener('blur', () => {
+      tasks.taskList[i].description = editTask.textContent;
+      tasks.updateStorage(tasks.taskList);
+    });
+
+    editTask.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        editTask.blur();
+      }
+    });
+
+    // Visibility for options: dots/trash when editing the task
+    const dots = li.querySelector('.dots');
+    const trash = li.querySelector('.trash');
+
+    editTask.addEventListener('click', () => {
+      dots.style.display = 'none';
+      trash.style.display = 'inline-block';
+    });
+  }
+  tasks.updateStorage(tasks.taskList);
 };
 
-showTask();
+// toggle completed: false/true
+window.toggleCompleted = function (index) {
+  tasks.taskList[index].completed = !tasks.taskList[index].completed;
+  showToDo();
+};
 
-myTask.addEventListener('click', (e) => {
+// Add task given by user when clicked on 'Enter' icon
+targetPressEnter.addEventListener('click', (e) => {
   e.preventDefault();
-  error.innerHTML = '';
+  tasks.addToDo(description.value);
+  showToDo();
+  description.value = '';
 });
 
-pressEnter.addEventListener('click', (e) => {
-  e.preventDefault();
-  const duplicate = taskListArray.find((task) => task.description === myTask.value);
-  if (myTask.value.length === 0) {
-    error.innerText = 'Fields cannot be empty!';
-  } else if (duplicate) {
-    error.innerText = 'Task already added to the To-Do!!';
-  } else {
-    error.innerHTML = '';
-    tasks.addTask(myTask.value);
-    taskListArray = tasks.getFromStorage();
-    showTask();
+// Add task given by user when pressed on 'Enter' key on keyboard
+targetPressEnter.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    tasks.addToDo(description.value);
+    showToDo();
+    description.value = '';
   }
-  form.reset();
 });
+
+// Removing a task
+window.removeTask = function (index) {
+  tasks.removeFunction(index);
+  tasks.updateStorage(tasks.taskList);
+  showToDo();
+};
+
+showToDo();
