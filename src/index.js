@@ -1,128 +1,86 @@
 import './style.css';
+import ToDo from './localstorage.js';
 
-import {
-  addToDo,
-  getFromStorage,
-  saveToStorage,
-} from './todo.js';
+const ul = document.getElementById('tasks-list');
+const description = document.getElementById('my-task');
+const targetPressEnter = document.getElementById('press-enter');
 
-import updateToDo from './UpdateStorage.js';
-import deleteToDo from './DeleteFunction.js';
-import deleteAllCompleted from './DeleteAll.js';
-
-const pressEnter = document.getElementById('press-enter');
-const hoverText = document.getElementById('button-hover');
-
-// Hover message when hover over enter icon
-pressEnter.addEventListener('mouseover', () => {
-  hoverText.style.display = 'block';
-});
-
-pressEnter.addEventListener('mouseout', () => {
-  hoverText.style.display = 'none';
-});
+const tasks = new ToDo();
 
 const showToDo = () => {
-  const tasks = getFromStorage();
-  const tasksList = document.getElementById('tasks-list');
-  tasksList.innerHTML = '';
-  tasks.forEach((todo, index) => {
+  ul.innerHTML = '';
+
+  for (let i = 0; i < tasks.taskList.length; i += 1) {
     const li = document.createElement('li');
-    li.className = 'new-task';
+    li.className = 'task-row';
+    const isChecked = tasks.taskList[i].completed ? 'checked' : '';
 
-    const todoItemLeft = document.createElement('div');
-    todoItemLeft.className = 'checkbox-and-task-description';
+    li.innerHTML = `
+      <input id="checkbox" type="checkbox" ${isChecked} onchange="toggleCompleted(${i})">
+      <p id="task-description" contenteditable="true">${tasks.taskList[i].description}</p>
+      <div class="options">
+        <button class="dots"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        <span class="trash" onclick="removeTask(${i})"><i class="fa-solid fa-trash-can"></i></span>
+      </div>
+      `;
+    ul.appendChild(li);
 
-    const input = document.createElement('input');
-    input.className = 'checkbox';
-    input.type = 'checkbox';
-    if (todo.completed) {
-      input.setAttribute('checked', '');
-    }
+    // Edit task description
+    const editTask = li.querySelector('#task-description');
 
-    input.onchange = (e) => {
-      if (e.target.checked) {
-        tasks[index].completed = true;
-        e.target.parentNode.children[1].classList.add('strike-through');
-      } else {
-        tasks[index].completed = false;
-        e.target.parentNode.children[1].classList.remove('strike-through');
+    editTask.addEventListener('blur', () => {
+      tasks.taskList[i].description = editTask.textContent;
+      tasks.updateStorage(tasks.taskList);
+    });
+
+    editTask.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        editTask.blur();
       }
-      saveToStorage(tasks);
-    };
-
-    todoItemLeft.appendChild(input);
-
-    const taskDescription = document.createElement('p');
-    taskDescription.classList.add('show');
-    if (todo.completed) {
-      taskDescription.classList.add('strike-through');
-    } else {
-      taskDescription.classList.remove('strike-through');
-    }
-    taskDescription.innerText = todo.description;
-    todoItemLeft.appendChild(taskDescription);
-
-    const editInput = document.createElement('input');
-    editInput.className = 'hide';
-    editInput.type = 'text';
-    editInput.value = todo.description;
-    editInput.addEventListener('focusout', (e) => {
-      li.classList.toggle('edit-bg');
-      updateToDo(tasks, index, e.target.value);
-      showToDo();
     });
-    todoItemLeft.appendChild(editInput);
 
-    li.appendChild(todoItemLeft);
+    // Visibility for options: dots/trash when editing the task
+    const dots = li.querySelector('.dots');
+    const trash = li.querySelector('.trash');
 
-    const deleteIcon = document.createElement('span');
-    deleteIcon.className = 'hide';
-    deleteIcon.innerHTML = 'delete';
-    deleteIcon.addEventListener('click', () => {
-      deleteToDo(tasks, index);
-      showToDo();
+    editTask.addEventListener('click', () => {
+      dots.style.display = 'none';
+      trash.style.display = 'inline-block';
     });
-    li.appendChild(deleteIcon);
-
-    const moreVert = document.createElement('span');
-    moreVert.className = 'material-symbols-outlined';
-    moreVert.innerHTML = 'more_vert';
-    moreVert.addEventListener('click', () => {
-      moreVert.className = 'hide';
-      deleteIcon.className = 'material-symbols-outlined';
-
-      taskDescription.className = 'hide';
-      editInput.className = 'show';
-      li.classList.toggle('edit-bg');
-      editInput.focus();
-    });
-    li.appendChild(moreVert);
-    tasksList.appendChild(li);
-
-    const clearList = document.getElementById('clear-button');
-    clearList.addEventListener('click', () => {
-      deleteAllCompleted(tasks);
-      showToDo();
-    });
-  });
+  }
+  tasks.updateStorage(tasks.taskList);
 };
 
-window.addEventListener('load', () => {
-  const addNewTodo = document.getElementById('press-enter');
-  addNewTodo.addEventListener('click', () => {
-    // if condition
-    addToDo();
-    showToDo();
-  });
-
-  const todoInput = document.getElementById('my-task');
-  todoInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      addToDo();
-      showToDo();
-    }
-  });
-
+// toggle completed: false/true
+window.toggleCompleted = function (index) {
+  tasks.taskList[index].completed = !tasks.taskList[index].completed;
   showToDo();
+};
+
+// Add task given by user when clicked on 'Enter' icon
+targetPressEnter.addEventListener('click', (e) => {
+  e.preventDefault();
+  tasks.addToDo(description.value);
+  showToDo();
+  description.value = '';
 });
+
+// Add task given by user when pressed on 'Enter' key on keyboard
+targetPressEnter.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    tasks.addToDo(description.value);
+    showToDo();
+    description.value = '';
+  }
+});
+
+// Removing a task
+window.removeTask = function (index) {
+  tasks.removeFunction(index);
+  tasks.updateStorage(tasks.taskList);
+  showToDo();
+};
+
+showToDo();
