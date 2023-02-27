@@ -8,7 +8,7 @@ export default class ToDo {
   // add function
   addToDo(description) {
     const completed = false;
-    const index = this.taskList.length;
+    const index = this.taskList.length + 1;
     const updatedToDo = [
       ...this.taskList,
       { completed, description, index },
@@ -18,9 +18,9 @@ export default class ToDo {
 
   // remove function
   removeFunction(index) {
-    const updatedToDo = this.taskList.filter((task) => task.index !== index);
+    const updatedToDo = this.taskList.filter((task) => task.index !== index + 1);
     for (let i = 0; i < updatedToDo.length; i += 1) {
-      updatedToDo[i].index = i;
+      updatedToDo[i].index = i + 1;
     }
     this.updateStorage(updatedToDo);
   }
