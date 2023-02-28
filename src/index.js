@@ -1,4 +1,5 @@
 // index.js
+import './style.css';
 import ToDo from './localstorage.js';
 import toggleCompleted from './completedCheck.js';
 import clearCompleted from './deleteAll.js';
