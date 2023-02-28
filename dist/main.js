@@ -116,7 +116,7 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst toggleCompleted = (index, tasks) => {\n  tasks.taskList[index].completed = !tasks.taskList[index].completed;\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (toggleCompleted);\n\n//# sourceURL=webpack://to-do-list/./src/completedCheck.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n// completedCheck.js\nconst toggleCompleted = (index, tasks) => {\n  tasks.taskList[index].completed = !tasks.taskList[index].completed;\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (toggleCompleted);\n\n//# sourceURL=webpack://to-do-list/./src/completedCheck.js?");
 
 /***/ }),
 
@@ -126,7 +126,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \**************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst clearCompleted = (tasks) => {\n  tasks.taskList = tasks.taskList.filter((task) => !task.completed);\n  for (let i = 0; i < tasks.taskList.length; i += 1) {\n    tasks.taskList[i].index = i + 1;\n  }\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (clearCompleted);\n\n//# sourceURL=webpack://to-do-list/./src/deleteAll.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n// deleteAll.js\nconst clearCompleted = (tasks) => {\n  tasks.taskList = tasks.taskList.filter((task) => !task.completed);\n  for (let i = 0; i < tasks.taskList.length; i += 1) {\n    tasks.taskList[i].index = i + 1;\n  }\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (clearCompleted);\n\n//# sourceURL=webpack://to-do-list/./src/deleteAll.js?");
 
 /***/ }),
 
