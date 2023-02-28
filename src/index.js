@@ -1,5 +1,7 @@
-import './style.css';
+// index.js
 import ToDo from './localstorage.js';
+import toggleCompleted from './completedCheck.js';
+import clearCompleted from './deleteAll.js';
 
 const ul = document.getElementById('tasks-list');
 const description = document.getElementById('my-task');
@@ -16,7 +18,7 @@ const showToDo = () => {
     const isChecked = tasks.taskList[i].completed ? 'checked' : '';
 
     li.innerHTML = `
-      <input id="checkbox" type="checkbox" ${isChecked} onchange="toggleCompleted(${i})">
+      <input id="checkbox" type="checkbox" ${isChecked}>
       <p id="task-description" contenteditable="true">${tasks.taskList[i].description}</p>
       <div class="options">
         <button class="dots"><i class="fa-solid fa-ellipsis-vertical"></i></button>
@@ -24,6 +26,14 @@ const showToDo = () => {
       </div>
       `;
     ul.appendChild(li);
+
+    // Call toggleCompleted function on checkbox change
+    const checkbox = li.querySelector('#checkbox');
+    checkbox.addEventListener('change', () => {
+      toggleCompleted(i, tasks);
+      tasks.updateStorage(tasks.taskList);
+      showToDo();
+    });
 
     // Edit task description
     const editTask = li.querySelector('#task-description');
@@ -52,12 +62,6 @@ const showToDo = () => {
   tasks.updateStorage(tasks.taskList);
 };
 
-// toggle completed: false/true
-window.toggleCompleted = function (index) {
-  tasks.taskList[index].completed = !tasks.taskList[index].completed;
-  showToDo();
-};
-
 // Add task given by user when clicked on 'Enter' icon
 targetPressEnter.addEventListener('click', (e) => {
   e.preventDefault();
@@ -77,10 +81,19 @@ targetPressEnter.addEventListener('keypress', (e) => {
 });
 
 // Removing a task
-window.removeTask = function (index) {
+window.removeTask = (index) => {
   tasks.removeFunction(index);
   tasks.updateStorage(tasks.taskList);
   showToDo();
 };
+
+// Clear All Completed
+const clearButton = document.getElementById('clear-button');
+
+clearButton.addEventListener('click', () => {
+  clearCompleted(tasks);
+  tasks.updateStorage(tasks.taskList);
+  showToDo();
+});
 
 showToDo();
