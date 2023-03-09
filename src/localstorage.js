@@ -9,4 +9,4 @@ const updateStorage = (data) => {
   window.localStorage.setItem('ToDo-storage', JSON.stringify(data));
 };
 
-export { getFromStorage, updateStorage };
+module.exports = { getFromStorage, updateStorage };
