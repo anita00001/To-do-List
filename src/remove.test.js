@@ -1,4 +1,4 @@
-const removeFunction = require('./remove');
+const removeFunction = require('./remove.js');
 
 const tasks = [
   { index: 1, description: 'Task 1', completed: true },
@@ -8,16 +8,18 @@ const tasks = [
   { index: 5, description: 'Task 5', completed: false },
 ];
 
-test('Remove one task from TO-DO-List', () => {
-  const updatedTasks = removeFunction(tasks, 3 - 1);
-  expect(updatedTasks).toEqual([
-    { index: 1, description: 'Task 1', completed: true },
-    { index: 2, description: 'Task 2', completed: false },
-    { index: 3, description: 'Task 4', completed: false },
-    { index: 4, description: 'Task 5', completed: false },
-  ]);
+describe('Remove a task given by the index from To-Do List', () => {
+  test('Remove one task from TO-DO-List', () => {
+    const updatedTasks = removeFunction(tasks, 3 - 1);
+    expect(updatedTasks).toEqual([
+      { index: 1, description: 'Task 1', completed: true },
+      { index: 2, description: 'Task 2', completed: false },
+      { index: 3, description: 'Task 4', completed: false },
+      { index: 4, description: 'Task 5', completed: false },
+    ]);
 
-  for (let i = 0; i < updatedTasks.length; i += 1) {
-    expect(updatedTasks[i].index).toEqual(i + 1);
-  }
+    for (let i = 0; i < updatedTasks.length; i += 1) {
+      expect(updatedTasks[i].index).toEqual(i + 1);
+    }
+  });
 });

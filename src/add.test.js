@@ -11,8 +11,10 @@ const AddedTask = [
   { description: 'newtask', completed: false, index: 3 },
 ];
 
-test('Add a newtask', () => {
-  expect(
-    addToDo(oldTask, 'newtask'),
-  ).toEqual(AddedTask);
+describe('Remove a task given by the index from To-Do List', () => {
+  test('Add a newtask', () => {
+    expect(
+      addToDo(oldTask, 'newtask'),
+    ).toEqual(AddedTask);
+  });
 });
