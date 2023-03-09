@@ -49,6 +49,7 @@ const showToDo = () => {
     editInputTask.addEventListener('blur', () => {
       const editTaskContent = editInputTask.textContent.trim();
       todos = editTask(todos, index, editTaskContent);
+      updateStorage(todos);
     });
 
     editInputTask.addEventListener('keydown', (event) => {

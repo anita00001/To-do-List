@@ -8,4 +8,4 @@ const toggleCompleted = (index, tasks) => {
   return newTasks;
 };
 
-export default toggleCompleted;
+module.exports = toggleCompleted;
