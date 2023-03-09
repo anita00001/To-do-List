@@ -6,42 +6,50 @@
 
 body {
   font-family: 'Courier New', Courier, monospace;
-  display: flex;
   flex-direction: column;
+}
+
+body,
+.title,
+.new-task {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 main {
   width: 80%;
   margin-top: 3rem;
   box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);
-  -webkit-box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);
-  -moz-box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);
 }
 
 .title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid lightgray;
-  padding: 0 1rem;
-}
-
-h1 {
   padding: 1rem;
 }
 
-.title > i {
+.title,
+.new-task,
+.task-row {
+  border-bottom: 2px solid lightgray;
+}
+
+input,
+p,
+button {
+  border: none;
+  background-color: #fff;
+  outline: none;
+}
+
+button,
+i,
+input {
   cursor: pointer;
   color: rgba(0, 0, 0, 0.25);
 }
 
 .new-task {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 0 1rem;
-  border-bottom: 2px solid lightgray;
 }
 
 input[type=text] {
@@ -49,72 +57,36 @@ input[type=text] {
   margin: 0 1.5rem;
   padding: 1rem 3rem;
   font-style: italic;
-  border: none;
-  outline: none;
 }
 
 #press-enter {
-  border: none;
-  background-color: #fff;
-  cursor: pointer;
-  color: rgba(0, 0, 0, 0.25);
   transform: rotate(90deg);
 }
 
 .task-row {
   display: grid;
   grid-template-columns: 3fr 18fr 1fr;
-
-  /* padding: 1rem; */
   height: 2.5rem;
   align-items: center;
   gap: 1rem;
-  border-bottom: 2px solid lightgray;
-}
-
-.task-row > input {
-  cursor: pointer;
 }
 
 #task-description {
-  outline: none;
-  height: 100%;
   padding: 0.5rem 0;
-}
-
-.editing {
-  background-color: rgba(250, 203, 61, 0.637);
-  color: white;
-}
-
-.task-row .options button {
-  border: none;
-  background-color: #fff;
 }
 
 .task-row i {
   width: 100%;
-  cursor: pointer;
   text-align: center;
-  color: rgba(0, 0, 0, 0.25);
 }
 
 .options > .trash {
   display: none;
 }
 
-/* .options:hover .dots {
-  display: none;
-}
-
-.options:hover .trash {
-  display: block;
-} */
-
 #clear-button {
   width: 100%;
   padding: 0.75rem 0;
-  border: none;
-  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.1);
   text-decoration: underline;
 }

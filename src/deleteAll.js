@@ -1,9 +1,10 @@
 // deleteAll.js
 const clearCompleted = (tasks) => {
-  tasks.taskList = tasks.taskList.filter((task) => !task.completed);
-  for (let i = 0; i < tasks.taskList.length; i += 1) {
-    tasks.taskList[i].index = i + 1;
+  const updatedTasks = tasks.filter((task) => !task.completed);
+  for (let i = 0; i < updatedTasks.length; i += 1) {
+    updatedTasks[i].index = i + 1;
   }
+  return updatedTasks;
 };
 
-export default clearCompleted;
+module.exports = clearCompleted;

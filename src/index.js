@@ -1,29 +1,35 @@
 // index.js
 import './style.css';
-import ToDo from './localstorage.js';
+import {
+  getFromStorage,
+  updateStorage,
+} from './localstorage.js';
+
 import toggleCompleted from './completedCheck.js';
 import clearCompleted from './deleteAll.js';
+import removeFunction from './remove.js';
+import addToDo from './add.js';
 
-const ul = document.getElementById('tasks-list');
 const description = document.getElementById('my-task');
 const targetPressEnter = document.getElementById('press-enter');
 
-const tasks = new ToDo();
+let todos = getFromStorage();
 
 const showToDo = () => {
+  const ul = document.getElementById('tasks-list');
   ul.innerHTML = '';
 
-  for (let i = 0; i < tasks.taskList.length; i += 1) {
+  todos.forEach((todo, index) => {
     const li = document.createElement('li');
     li.className = 'task-row';
-    const isChecked = tasks.taskList[i].completed ? 'checked' : '';
+    const isChecked = todo.completed ? 'checked' : '';
 
     li.innerHTML = `
       <input id="checkbox" type="checkbox" ${isChecked}>
-      <p id="task-description" contenteditable="true">${tasks.taskList[i].description}</p>
+      <p id="task-description" contenteditable="true">${todo.description}</p>
       <div class="options">
         <button class="dots"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        <span class="trash" onclick="removeTask(${i})"><i class="fa-solid fa-trash-can"></i></span>
+        <span class="trash" onclick="removeTask(${index})"><i class="fa-solid fa-trash-can"></i></span>
       </div>
       `;
     ul.appendChild(li);
@@ -31,8 +37,8 @@ const showToDo = () => {
     // Call toggleCompleted function on checkbox change
     const checkbox = li.querySelector('#checkbox');
     checkbox.addEventListener('change', () => {
-      toggleCompleted(i, tasks);
-      tasks.updateStorage(tasks.taskList);
+      todos = toggleCompleted(index, todos);
+      updateStorage(todos);
       showToDo();
     });
 
@@ -40,8 +46,8 @@ const showToDo = () => {
     const editTask = li.querySelector('#task-description');
 
     editTask.addEventListener('blur', () => {
-      tasks.taskList[i].description = editTask.textContent;
-      tasks.updateStorage(tasks.taskList);
+      todo.description = editTask.textContent;
+      updateStorage(todos);
     });
 
     editTask.addEventListener('keydown', (event) => {
@@ -59,14 +65,14 @@ const showToDo = () => {
       dots.style.display = 'none';
       trash.style.display = 'inline-block';
     });
-  }
-  tasks.updateStorage(tasks.taskList);
+  });
+  updateStorage(todos);
 };
 
 // Add task given by user when clicked on 'Enter' icon
 targetPressEnter.addEventListener('click', (e) => {
   e.preventDefault();
-  tasks.addToDo(description.value);
+  addToDo(todos, description.value);
   showToDo();
   description.value = '';
 });
@@ -75,7 +81,7 @@ targetPressEnter.addEventListener('click', (e) => {
 targetPressEnter.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
-    tasks.addToDo(description.value);
+    addToDo(todos, description.value);
     showToDo();
     description.value = '';
   }
@@ -83,8 +89,8 @@ targetPressEnter.addEventListener('keypress', (e) => {
 
 // Removing a task
 window.removeTask = (index) => {
-  tasks.removeFunction(index);
-  tasks.updateStorage(tasks.taskList);
+  todos = removeFunction(todos, index);
+  updateStorage(todos);
   showToDo();
 };
 
@@ -92,8 +98,8 @@ window.removeTask = (index) => {
 const clearButton = document.getElementById('clear-button');
 
 clearButton.addEventListener('click', () => {
-  clearCompleted(tasks);
-  tasks.updateStorage(tasks.taskList);
+  todos = clearCompleted(todos);
+  updateStorage(todos);
   showToDo();
 });
 
