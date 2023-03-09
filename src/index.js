@@ -9,6 +9,7 @@ import toggleCompleted from './completedCheck.js';
 import clearCompleted from './deleteAll.js';
 import removeFunction from './remove.js';
 import addToDo from './add.js';
+import editTask from './edit.js';
 
 const description = document.getElementById('my-task');
 const targetPressEnter = document.getElementById('press-enter');
@@ -43,17 +44,18 @@ const showToDo = () => {
     });
 
     // Edit task description
-    const editTask = li.querySelector('#task-description');
+    const editInputTask = li.querySelector('#task-description');
 
-    editTask.addEventListener('blur', () => {
-      todo.description = editTask.textContent;
+    editInputTask.addEventListener('blur', () => {
+      const editTaskContent = editInputTask.textContent.trim();
+      todos = editTask(todos, index, editTaskContent);
       updateStorage(todos);
     });
 
-    editTask.addEventListener('keydown', (event) => {
+    editInputTask.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-        editTask.blur();
+        editInputTask.blur();
       }
     });
 
@@ -61,7 +63,7 @@ const showToDo = () => {
     const dots = li.querySelector('.dots');
     const trash = li.querySelector('.trash');
 
-    editTask.addEventListener('click', () => {
+    editInputTask.addEventListener('click', () => {
       dots.style.display = 'none';
       trash.style.display = 'inline-block';
     });
