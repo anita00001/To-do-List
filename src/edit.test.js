@@ -12,8 +12,10 @@ const newTask = [
   { description: 'Task3', completed: false, index: 3 },
 ];
 
-test('Update ToDo item', () => {
-  expect(
-    editTask(previousTask, 2 - 1, 'Update GitHub Profile'),
-  ).toEqual(newTask);
+describe('Edit the task in To-Do List', () => {
+  test('Update ToDo item', () => {
+    expect(
+      editTask(previousTask, 2 - 1, 'Update GitHub Profile'),
+    ).toEqual(newTask);
+  });
 });

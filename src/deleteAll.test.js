@@ -10,8 +10,10 @@ const remainingList = [
   { description: 'Task2', completed: false, index: 1 },
 ];
 
-test('Delete All Completed ToDo items', () => {
-  expect(
-    clearCompleted(oldList),
-  ).toEqual(remainingList);
+describe('Delete All tasks that are checked to completed in To-Do List', () => {
+  test('Delete All Completed ToDo items', () => {
+    expect(
+      clearCompleted(oldList),
+    ).toEqual(remainingList);
+  });
 });
