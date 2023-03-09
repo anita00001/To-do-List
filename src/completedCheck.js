@@ -1,6 +1,11 @@
 // completedCheck.js
 const toggleCompleted = (index, tasks) => {
-  tasks.taskList[index].completed = !tasks.taskList[index].completed;
+  const newTasks = [...tasks];
+  newTasks[index] = {
+    ...newTasks[index],
+    completed: !newTasks[index].completed,
+  };
+  return newTasks;
 };
 
 export default toggleCompleted;
