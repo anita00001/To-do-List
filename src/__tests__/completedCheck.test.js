@@ -1,4 +1,4 @@
-const toggleCompleted = require('./completedCheck.js');
+const toggleCompleted = require('../modules/completedCheck.js');
 
 describe('toggleCompleted', () => {
   test('Toggle the completed status of a task at a given index', () => {

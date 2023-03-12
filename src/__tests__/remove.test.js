@@ -1,4 +1,4 @@
-const removeFunction = require('./remove.js');
+const removeFunction = require('../modules/remove.js');
 
 const tasks = [
   { index: 1, description: 'Task 1', completed: true },
