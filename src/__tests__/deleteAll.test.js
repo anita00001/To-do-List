@@ -1,4 +1,4 @@
-const clearCompleted = require('./deleteAll.js');
+const clearCompleted = require('../modules/deleteAll.js');
 
 const oldList = [
   { description: 'Task1', completed: true, index: 1 },

@@ -119,46 +119,6 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 
 /***/ }),
 
-/***/ "./src/add.js":
-/*!********************!*\
-  !*** ./src/add.js ***!
-  \********************/
-/***/ ((module) => {
-
-eval("// add.js\nconst addToDo = (todos, description) => {\n  const updatedToDo = {\n    completed: false,\n    description,\n    index: todos.length + 1,\n  };\n  todos.push(updatedToDo);\n  return todos;\n};\n\nmodule.exports = addToDo;\n\n//# sourceURL=webpack://to-do-list/./src/add.js?");
-
-/***/ }),
-
-/***/ "./src/completedCheck.js":
-/*!*******************************!*\
-  !*** ./src/completedCheck.js ***!
-  \*******************************/
-/***/ ((module) => {
-
-eval("// completedCheck.js\nconst toggleCompleted = (index, tasks) => {\n  const newTasks = [...tasks];\n  newTasks[index] = {\n    ...newTasks[index],\n    completed: !newTasks[index].completed,\n  };\n  return newTasks;\n};\n\nmodule.exports = toggleCompleted;\n\n//# sourceURL=webpack://to-do-list/./src/completedCheck.js?");
-
-/***/ }),
-
-/***/ "./src/deleteAll.js":
-/*!**************************!*\
-  !*** ./src/deleteAll.js ***!
-  \**************************/
-/***/ ((module) => {
-
-eval("// deleteAll.js\nconst clearCompleted = (tasks) => {\n  const updatedTasks = tasks.filter((task) => !task.completed);\n  for (let i = 0; i < updatedTasks.length; i += 1) {\n    updatedTasks[i].index = i + 1;\n  }\n  return updatedTasks;\n};\n\nmodule.exports = clearCompleted;\n\n//# sourceURL=webpack://to-do-list/./src/deleteAll.js?");
-
-/***/ }),
-
-/***/ "./src/edit.js":
-/*!*********************!*\
-  !*** ./src/edit.js ***!
-  \*********************/
-/***/ ((module) => {
-
-eval("const editTask = (todos, index, newDescription) => {\n  todos[index].description = newDescription;\n  return todos;\n};\n\nmodule.exports = editTask;\n\n//# sourceURL=webpack://to-do-list/./src/edit.js?");
-
-/***/ }),
-
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -166,27 +126,67 @@ eval("const editTask = (todos, index, newDescription) => {\n  todos[index].descr
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _localstorage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./localstorage.js */ \"./src/localstorage.js\");\n/* harmony import */ var _localstorage_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_localstorage_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _completedCheck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./completedCheck.js */ \"./src/completedCheck.js\");\n/* harmony import */ var _completedCheck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_completedCheck_js__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _deleteAll_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./deleteAll.js */ \"./src/deleteAll.js\");\n/* harmony import */ var _deleteAll_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_deleteAll_js__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _remove_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./remove.js */ \"./src/remove.js\");\n/* harmony import */ var _remove_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_remove_js__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _add_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./add.js */ \"./src/add.js\");\n/* harmony import */ var _add_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_add_js__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _edit_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./edit.js */ \"./src/edit.js\");\n/* harmony import */ var _edit_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_edit_js__WEBPACK_IMPORTED_MODULE_6__);\n// index.js\n\n\n\n\n\n\n\n\n\nconst description = document.getElementById('my-task');\nconst targetPressEnter = document.getElementById('press-enter');\n\nlet todos = (0,_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.getFromStorage)();\n\nconst showToDo = () => {\n  const ul = document.getElementById('tasks-list');\n  ul.innerHTML = '';\n\n  todos.forEach((todo, index) => {\n    const li = document.createElement('li');\n    li.className = 'task-row';\n    const isChecked = todo.completed ? 'checked' : '';\n\n    li.innerHTML = `\n      <input id=\"checkbox\" type=\"checkbox\" ${isChecked}>\n      <p id=\"task-description\" contenteditable=\"true\">${todo.description}</p>\n      <div class=\"options\">\n        <button class=\"dots\"><i class=\"fa-solid fa-ellipsis-vertical\"></i></button>\n        <span class=\"trash\" onclick=\"removeTask(${index})\"><i class=\"fa-solid fa-trash-can\"></i></span>\n      </div>\n      `;\n    ul.appendChild(li);\n\n    // Call toggleCompleted function on checkbox change\n    const checkbox = li.querySelector('#checkbox');\n    checkbox.addEventListener('change', () => {\n      todos = _completedCheck_js__WEBPACK_IMPORTED_MODULE_2___default()(index, todos);\n      (0,_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n      showToDo();\n    });\n\n    // Edit task description\n    const editInputTask = li.querySelector('#task-description');\n\n    editInputTask.addEventListener('blur', () => {\n      const editTaskContent = editInputTask.textContent.trim();\n      todos = _edit_js__WEBPACK_IMPORTED_MODULE_6___default()(todos, index, editTaskContent);\n      (0,_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n    });\n\n    editInputTask.addEventListener('keydown', (event) => {\n      if (event.key === 'Enter') {\n        event.preventDefault();\n        editInputTask.blur();\n      }\n    });\n\n    // Visibility for options: dots/trash when editing the task\n    const dots = li.querySelector('.dots');\n    const trash = li.querySelector('.trash');\n\n    editInputTask.addEventListener('click', () => {\n      dots.style.display = 'none';\n      trash.style.display = 'inline-block';\n    });\n  });\n  (0,_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n};\n\n// Add task given by user when clicked on 'Enter' icon\ntargetPressEnter.addEventListener('click', (e) => {\n  e.preventDefault();\n  _add_js__WEBPACK_IMPORTED_MODULE_5___default()(todos, description.value);\n  showToDo();\n  description.value = '';\n});\n\n// Add task given by user when pressed on 'Enter' key on keyboard\ntargetPressEnter.addEventListener('keypress', (e) => {\n  if (e.key === 'Enter') {\n    e.preventDefault();\n    _add_js__WEBPACK_IMPORTED_MODULE_5___default()(todos, description.value);\n    showToDo();\n    description.value = '';\n  }\n});\n\n// Removing a task\nwindow.removeTask = (index) => {\n  todos = _remove_js__WEBPACK_IMPORTED_MODULE_4___default()(todos, index);\n  (0,_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n  showToDo();\n};\n\n// Clear All Completed\nconst clearButton = document.getElementById('clear-button');\n\nclearButton.addEventListener('click', () => {\n  todos = _deleteAll_js__WEBPACK_IMPORTED_MODULE_3___default()(todos);\n  (0,_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n  showToDo();\n});\n\nshowToDo();\n\n//# sourceURL=webpack://to-do-list/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/localstorage.js */ \"./src/modules/localstorage.js\");\n/* harmony import */ var _modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _modules_completedCheck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/completedCheck.js */ \"./src/modules/completedCheck.js\");\n/* harmony import */ var _modules_completedCheck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_modules_completedCheck_js__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _modules_deleteAll_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/deleteAll.js */ \"./src/modules/deleteAll.js\");\n/* harmony import */ var _modules_deleteAll_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_modules_deleteAll_js__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _modules_remove_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/remove.js */ \"./src/modules/remove.js\");\n/* harmony import */ var _modules_remove_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_modules_remove_js__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _modules_add_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/add.js */ \"./src/modules/add.js\");\n/* harmony import */ var _modules_add_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_modules_add_js__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _modules_edit_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/edit.js */ \"./src/modules/edit.js\");\n/* harmony import */ var _modules_edit_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_modules_edit_js__WEBPACK_IMPORTED_MODULE_6__);\n// index.js\n\n\n\n\n\n\n\n\n\nconst description = document.getElementById('my-task');\nconst targetPressEnter = document.getElementById('press-enter');\n\nlet todos = (0,_modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.getFromStorage)();\n\nconst showToDo = () => {\n  const ul = document.getElementById('tasks-list');\n  ul.innerHTML = '';\n\n  todos.forEach((todo, index) => {\n    const li = document.createElement('li');\n    li.className = 'task-row';\n    const isChecked = todo.completed ? 'checked' : '';\n\n    li.innerHTML = `\n      <input id=\"checkbox\" type=\"checkbox\" ${isChecked}>\n      <p id=\"task-description\" contenteditable=\"true\">${todo.description}</p>\n      <div class=\"options\">\n        <button class=\"dots\"><i class=\"fa-solid fa-ellipsis-vertical\"></i></button>\n        <span class=\"trash\" onclick=\"removeTask(${index})\"><i class=\"fa-solid fa-trash-can\"></i></span>\n      </div>\n      `;\n    ul.appendChild(li);\n\n    // Call toggleCompleted function on checkbox change\n    const checkbox = li.querySelector('#checkbox');\n    checkbox.addEventListener('change', () => {\n      todos = _modules_completedCheck_js__WEBPACK_IMPORTED_MODULE_2___default()(index, todos);\n      (0,_modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n      showToDo();\n    });\n\n    // Edit task description\n    const editInputTask = li.querySelector('#task-description');\n\n    editInputTask.addEventListener('blur', () => {\n      const editTaskContent = editInputTask.textContent.trim();\n      todos = _modules_edit_js__WEBPACK_IMPORTED_MODULE_6___default()(todos, index, editTaskContent);\n      (0,_modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n    });\n\n    editInputTask.addEventListener('keydown', (event) => {\n      if (event.key === 'Enter') {\n        event.preventDefault();\n        editInputTask.blur();\n      }\n    });\n\n    // Visibility for options: dots/trash when editing the task\n    const dots = li.querySelector('.dots');\n    const trash = li.querySelector('.trash');\n\n    editInputTask.addEventListener('click', () => {\n      dots.style.display = 'none';\n      trash.style.display = 'inline-block';\n    });\n  });\n  (0,_modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n};\n\n// Add task given by user when clicked on 'Enter' icon\ntargetPressEnter.addEventListener('click', (e) => {\n  e.preventDefault();\n  _modules_add_js__WEBPACK_IMPORTED_MODULE_5___default()(todos, description.value);\n  showToDo();\n  description.value = '';\n});\n\n// Add task given by user when pressed on 'Enter' key on keyboard\ntargetPressEnter.addEventListener('keypress', (e) => {\n  if (e.key === 'Enter') {\n    e.preventDefault();\n    _modules_add_js__WEBPACK_IMPORTED_MODULE_5___default()(todos, description.value);\n    showToDo();\n    description.value = '';\n  }\n});\n\n// Removing a task\nwindow.removeTask = (index) => {\n  todos = _modules_remove_js__WEBPACK_IMPORTED_MODULE_4___default()(todos, index);\n  (0,_modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n  showToDo();\n};\n\n// Clear All Completed\nconst clearButton = document.getElementById('clear-button');\n\nclearButton.addEventListener('click', () => {\n  todos = _modules_deleteAll_js__WEBPACK_IMPORTED_MODULE_3___default()(todos);\n  (0,_modules_localstorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(todos);\n  showToDo();\n});\n\nshowToDo();\n\n//# sourceURL=webpack://to-do-list/./src/index.js?");
 
 /***/ }),
 
-/***/ "./src/localstorage.js":
+/***/ "./src/modules/add.js":
+/*!****************************!*\
+  !*** ./src/modules/add.js ***!
+  \****************************/
+/***/ ((module) => {
+
+eval("// add.js\nconst addToDo = (todos, description) => {\n  const updatedToDo = {\n    completed: false,\n    description,\n    index: todos.length + 1,\n  };\n  todos.push(updatedToDo);\n  return todos;\n};\n\nmodule.exports = addToDo;\n\n//# sourceURL=webpack://to-do-list/./src/modules/add.js?");
+
+/***/ }),
+
+/***/ "./src/modules/completedCheck.js":
+/*!***************************************!*\
+  !*** ./src/modules/completedCheck.js ***!
+  \***************************************/
+/***/ ((module) => {
+
+eval("// completedCheck.js\nconst toggleCompleted = (index, tasks) => {\n  const newTasks = [...tasks];\n  newTasks[index] = {\n    ...newTasks[index],\n    completed: !newTasks[index].completed,\n  };\n  return newTasks;\n};\n\nmodule.exports = toggleCompleted;\n\n//# sourceURL=webpack://to-do-list/./src/modules/completedCheck.js?");
+
+/***/ }),
+
+/***/ "./src/modules/deleteAll.js":
+/*!**********************************!*\
+  !*** ./src/modules/deleteAll.js ***!
+  \**********************************/
+/***/ ((module) => {
+
+eval("// deleteAll.js\nconst clearCompleted = (tasks) => {\n  const updatedTasks = tasks.filter((task) => !task.completed);\n  for (let i = 0; i < updatedTasks.length; i += 1) {\n    updatedTasks[i].index = i + 1;\n  }\n  return updatedTasks;\n};\n\nmodule.exports = clearCompleted;\n\n//# sourceURL=webpack://to-do-list/./src/modules/deleteAll.js?");
+
+/***/ }),
+
+/***/ "./src/modules/edit.js":
 /*!*****************************!*\
-  !*** ./src/localstorage.js ***!
+  !*** ./src/modules/edit.js ***!
   \*****************************/
 /***/ ((module) => {
 
-eval("// localstorage.js\nconst getFromStorage = () => {\n  let storedData = JSON.parse(window.localStorage.getItem('ToDo-storage'));\n  storedData = Array.isArray(storedData) ? storedData : [];\n  return storedData;\n};\n\nconst updateStorage = (data) => {\n  window.localStorage.setItem('ToDo-storage', JSON.stringify(data));\n};\n\nmodule.exports = { getFromStorage, updateStorage };\n\n//# sourceURL=webpack://to-do-list/./src/localstorage.js?");
+eval("const editTask = (todos, index, newDescription) => {\n  todos[index].description = newDescription;\n  return todos;\n};\n\nmodule.exports = editTask;\n\n//# sourceURL=webpack://to-do-list/./src/modules/edit.js?");
 
 /***/ }),
 
-/***/ "./src/remove.js":
-/*!***********************!*\
-  !*** ./src/remove.js ***!
-  \***********************/
+/***/ "./src/modules/localstorage.js":
+/*!*************************************!*\
+  !*** ./src/modules/localstorage.js ***!
+  \*************************************/
 /***/ ((module) => {
 
-eval("// remove.js\nconst removeFunction = (tasks, index) => {\n  const updatedToDo = tasks.filter((it) => it.index !== index + 1);\n  for (let i = 0; i < updatedToDo.length; i += 1) {\n    updatedToDo[i].index = i + 1;\n  }\n  return updatedToDo;\n};\n\nmodule.exports = removeFunction;\n\n//# sourceURL=webpack://to-do-list/./src/remove.js?");
+eval("// localstorage.js\nconst getFromStorage = () => {\n  let storedData = JSON.parse(window.localStorage.getItem('ToDo-storage'));\n  storedData = Array.isArray(storedData) ? storedData : [];\n  return storedData;\n};\n\nconst updateStorage = (data) => {\n  window.localStorage.setItem('ToDo-storage', JSON.stringify(data));\n};\n\nmodule.exports = { getFromStorage, updateStorage };\n\n//# sourceURL=webpack://to-do-list/./src/modules/localstorage.js?");
+
+/***/ }),
+
+/***/ "./src/modules/remove.js":
+/*!*******************************!*\
+  !*** ./src/modules/remove.js ***!
+  \*******************************/
+/***/ ((module) => {
+
+eval("// remove.js\nconst removeFunction = (tasks, index) => {\n  const updatedToDo = tasks.filter((it) => it.index !== index + 1);\n  for (let i = 0; i < updatedToDo.length; i += 1) {\n    updatedToDo[i].index = i + 1;\n  }\n  return updatedToDo;\n};\n\nmodule.exports = removeFunction;\n\n//# sourceURL=webpack://to-do-list/./src/modules/remove.js?");
 
 /***/ })
 

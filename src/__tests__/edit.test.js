@@ -1,4 +1,4 @@
-const editTask = require('./edit.js');
+const editTask = require('../modules/edit.js');
 
 const previousTask = [
   { description: 'Task1', completed: false, index: 1 },

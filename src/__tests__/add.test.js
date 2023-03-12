@@ -1,4 +1,4 @@
-const addToDo = require('./add.js');
+const addToDo = require('../modules/add.js');
 
 const oldTask = [
   { description: 'Task1', completed: false, index: 1 },

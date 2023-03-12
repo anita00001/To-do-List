@@ -3,13 +3,13 @@ import './style.css';
 import {
   getFromStorage,
   updateStorage,
-} from './localstorage.js';
+} from './modules/localstorage.js';
 
-import toggleCompleted from './completedCheck.js';
-import clearCompleted from './deleteAll.js';
-import removeFunction from './remove.js';
-import addToDo from './add.js';
-import editTask from './edit.js';
+import toggleCompleted from './modules/completedCheck.js';
+import clearCompleted from './modules/deleteAll.js';
+import removeFunction from './modules/remove.js';
+import addToDo from './modules/add.js';
+import editTask from './modules/edit.js';
 
 const description = document.getElementById('my-task');
 const targetPressEnter = document.getElementById('press-enter');
